@@ -4,12 +4,12 @@ import * as expenses from './api/expenses';
 import bodyParser from 'body-parser';
 
 const app = express();
-const port = 3000;
+const port = 8080;
 let database: any; 
 
-const username = 'USER_NAME';
-const password = 'PASSWORD';
-const dbName = 'DB_NAME';
+const username = process.env.DB_USER_NAME;
+const password = process.env.DB_PASSWORD;
+const dbName = process.env.DB_NAME;
 
 const DATABASE_NAME = "splitter";
 const CONNECTION_URL = `mongodb+srv://${username}:${password}@cluster0.2pegb.mongodb.net/${dbName}?retryWrites=true&w=majority`;
