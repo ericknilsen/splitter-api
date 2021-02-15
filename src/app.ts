@@ -13,7 +13,11 @@ const dbName = process.env.DB_NAME;
 
 const CONNECTION_URL = `mongodb+srv://${username}:${password}@cluster0.2pegb.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
-app.use(bodyParser.json());
+app.use(bodyParser.json(),(_, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((client) => {
