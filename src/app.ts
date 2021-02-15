@@ -4,7 +4,7 @@ import * as expenses from './api/expenses';
 import bodyParser from 'body-parser';
 
 const app = express();
-const port = 80;
+const port = 3000;
 let database: any; 
 
 const username = process.env.DB_USER_NAME;
