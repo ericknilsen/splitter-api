@@ -1,7 +1,7 @@
 
 const COLLECTION_NAME = "expenses";
 
-let list = (database, res) => {
+const list = (database, res) => {
     database.collection(COLLECTION_NAME).find({}).toArray(
         (err, docs) => {   
             res.json(docs);
@@ -9,7 +9,7 @@ let list = (database, res) => {
     );
 }
 
-let create = (database, req, res) => {
+const create = (database, req, res) => {
     database.collection(COLLECTION_NAME).insertOne(req.body, (error, result) => {
         res.send(result.insertedId);
     });
