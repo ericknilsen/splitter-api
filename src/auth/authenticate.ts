@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import { ACCESS_TOKEN_SECRET } from '../utils/constants';
 
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || ACCESS_TOKEN_SECRET;
 
 const authenticateJWT = (req, res, next) => {
     const authHeader = req.headers.authorization;

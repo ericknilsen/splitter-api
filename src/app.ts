@@ -4,14 +4,16 @@ import * as expenses from './api/expenses';
 import * as auth from './auth/login';
 import bodyParser from 'body-parser';
 import { authenticateJWT } from './auth/authenticate';
+import { DB_USER_NAME, DB_PASSWORD, DB_NAME, PORT } from './utils/constants';
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || PORT;
 let database: any;
 
-const username = process.env.DB_USER_NAME;
-const password = process.env.DB_PASSWORD;
-const dbName = process.env.DB_NAME;
+const username = process.env.DB_USER_NAME || DB_USER_NAME;
+const password = process.env.DB_PASSWORD || DB_PASSWORD;
+const dbName = process.env.DB_NAME || DB_NAME;
+
 
 const CONNECTION_URL = `mongodb+srv://${username}:${password}@cluster0.2pegb.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
@@ -35,7 +37,7 @@ MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology:
     })
 
 //Authentication    
-app.post('/login', (req, res) => auth.login(req, res));
+app.post('/login', (req, res) => auth.login(database, req, res));
 
 //Expenses
 app.get("/listExpenses", authenticateJWT, (_, res) => expenses.list(database, res));

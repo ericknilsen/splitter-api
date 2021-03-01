@@ -1,31 +1,25 @@
 import jwt from 'jsonwebtoken';
+import {findByUsername} from '../api/users';
+import { ACCESS_TOKEN_SECRET } from '../utils/constants';
 
-const users = [
-    {
-        username: process.env.API_USER_NAME,
-        password: process.env.API_PASSWORD,
-    },
-];
+const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || ACCESS_TOKEN_SECRET;
 
-const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
-
-const login = (req, res) => {
+const login = (database, req, res) => {
     // Read username and password from request body
     const { username, password } = req.body;
 
-    // Filter user from the users array by username and password
-    const user = users.find(u => { return u.username === username && u.password === password });
+    findByUsername(database, username).then(user => {
+        if (user && user.username === username && user.password === password) {
+            // Generate an access token
+            const accessToken = jwt.sign({ username: user.username }, accessTokenSecret);
 
-    if (user) {
-        // Generate an access token
-        const accessToken = jwt.sign({ username: user.username }, accessTokenSecret);
-
-        res.json({
-            accessToken
-        });
-    } else {
-        res.send('Username or password incorrect');
-    }
+            res.json({
+                accessToken
+            });
+        } else {
+            res.send('Username or password incorrect');
+        }
+    });
 }
 
 export {login};
