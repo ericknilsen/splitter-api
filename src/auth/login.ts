@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import {findByUsername} from '../api/users';
+import {findSocialUser} from '../api/social-users'
 import { ACCESS_TOKEN_SECRET } from '../utils/constants';
 
 const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET || ACCESS_TOKEN_SECRET;
@@ -22,4 +23,17 @@ const login = (database, req, res) => {
     });
 }
 
-export {login};
+const loginSocialUser = (database, req, res) => {
+    // Read username and password from request body
+    const { id, firstName, provider } = req.body;
+
+    findSocialUser(database, req).then(user => {   
+        // Generate an access token
+        const accessToken = jwt.sign({ username: user.firstName }, accessTokenSecret);
+        res.json({
+            accessToken
+        });
+    });
+}
+
+export {login, loginSocialUser};

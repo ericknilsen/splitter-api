@@ -2,6 +2,7 @@ import express from 'express';
 import MongoClient from 'mongodb';
 import * as expenses from './api/expenses';
 import * as auth from './auth/login';
+import * as socialUsers from './api/social-users';
 import bodyParser from 'body-parser';
 import { authenticateJWT } from './auth/authenticate';
 import { DB_USER_NAME, DB_PASSWORD, DB_NAME, PORT } from './utils/constants';
@@ -38,6 +39,11 @@ MongoClient.connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology:
 
 //Authentication    
 app.post('/login', (req, res) => auth.login(database, req, res));
+app.post('/loginsu', (req, res) => auth.loginSocialUser(database, req, res));
+
+//Social User
+app.get("/socialusers/:id", (req, res) => socialUsers.findById(database, req, res));
+app.post("/socialusers", (req, res) => socialUsers.create(database, req, res));
 
 //Expenses
 app.get("/listExpenses", authenticateJWT, (_, res) => expenses.list(database, res));
