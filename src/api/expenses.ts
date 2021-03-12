@@ -1,8 +1,18 @@
 
 const COLLECTION_NAME = "expenses";
 
-const list = (database, res) => {
-    database.collection(COLLECTION_NAME).find({}).toArray(
+const listUserExpenses = (database, req, res) => {
+    const user = req.params.userId;
+    database.collection(COLLECTION_NAME).find({user}).toArray(
+        (err, docs) => {   
+            res.json(docs);
+        }
+    );
+}
+
+const listGroupExpenses = (database, req, res) => {
+    const group = req.params.groupId;
+    database.collection(COLLECTION_NAME).find({group}).toArray(
         (err, docs) => {   
             res.json(docs);
         }
@@ -10,9 +20,9 @@ const list = (database, res) => {
 }
 
 const create = (database, req, res) => {
-    database.collection(COLLECTION_NAME).insertOne(req.body, (error, result) => {
+    database.collection(COLLECTION_NAME).insertOne(req.body, (err, result) => {
         res.send(result.insertedId);
     });
 }
 
-export {list, create}
+export {listUserExpenses, listGroupExpenses, create}

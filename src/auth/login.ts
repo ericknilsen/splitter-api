@@ -32,6 +32,7 @@ const loginSocialUser = (database, req, res) => {
         const accessToken = jwt.sign({ username: user.firstName }, accessTokenSecret);
         res.json({
             id: user._id,
+            group: user.group,
             accessToken: accessToken
         });
     });

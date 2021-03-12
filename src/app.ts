@@ -46,6 +46,7 @@ app.get("/socialusers/:id", (req, res) => socialUsers.findById(database, req, re
 app.post("/socialusers", (req, res) => socialUsers.create(database, req, res));
 
 //Expenses
-app.get("/listExpenses", authenticateJWT, (_, res) => expenses.list(database, res));
+app.get("/listUserExpenses/:userId", authenticateJWT, (req, res) => expenses.listUserExpenses(database, req, res));
+app.get("/listGroupExpenses/:groupId", authenticateJWT, (req, res) => expenses.listGroupExpenses(database, req, res));
 app.post("/createExpense", authenticateJWT, (req, res) => expenses.create(database, req, res));
 
