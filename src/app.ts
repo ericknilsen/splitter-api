@@ -1,6 +1,7 @@
 import express from 'express';
 import MongoClient from 'mongodb';
 import * as expenses from './api/expenses';
+import * as userGroups from './api/user-groups';
 import * as auth from './auth/login';
 import * as socialUsers from './api/social-users';
 import bodyParser from 'body-parser';
@@ -46,7 +47,9 @@ app.get("/socialusers/:id", (req, res) => socialUsers.findById(database, req, re
 app.post("/socialusers", (req, res) => socialUsers.create(database, req, res));
 
 //Expenses
-app.get("/listUserExpenses/:userId", authenticateJWT, (req, res) => expenses.listUserExpenses(database, req, res));
+app.get("/listUserExpenses/:userEmail", authenticateJWT, (req, res) => expenses.listUserExpenses(database, req, res));
 app.get("/listGroupExpenses/:groupId", authenticateJWT, (req, res) => expenses.listGroupExpenses(database, req, res));
 app.post("/createExpense", authenticateJWT, (req, res) => expenses.create(database, req, res));
 
+//User Groups
+app.get("/listUserGroupOfUser/:userEmail", authenticateJWT, (req, res) => userGroups.listUserGroupOfUser(database, req, res));

@@ -2,8 +2,8 @@
 const COLLECTION_NAME = "expenses";
 
 const listUserExpenses = (database, req, res) => {
-    const user = req.params.userId;
-    database.collection(COLLECTION_NAME).find({user}).toArray(
+    const user = req.params.userEmail;
+    database.collection(COLLECTION_NAME).find({$or: [{receiverUser:user}, {chargedUser: user}]}).toArray(
         (err, docs) => {   
             res.json(docs);
         }
