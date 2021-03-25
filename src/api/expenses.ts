@@ -1,3 +1,4 @@
+import { ObjectID } from "mongodb";
 
 const COLLECTION_NAME = "expenses";
 
@@ -25,4 +26,24 @@ const create = (database, req, res) => {
     });
 }
 
-export {listUserExpenses, listGroupExpenses, create}
+const update = (database, req, res) => { 
+    let errorMessage = '';
+    for (var i = 0; i < req.body.length; i++) {
+        let query = {_id: new ObjectID(req.body[i]._id)};
+        delete req.body[i]._id;
+        let newValues = {$set: req.body[i]};
+        database.collection(COLLECTION_NAME).updateOne(query, newValues, (err, result) => {
+            if (err) {
+                errorMessage = `Error updating expenses: ${err}`;
+            }
+        });
+    }
+
+    if (errorMessage) {
+        res.json({error: errorMessage});
+    } else {
+        res.json({message:'Expenses updated.'});
+    }
+}
+
+export {listUserExpenses, listGroupExpenses, create, update}
