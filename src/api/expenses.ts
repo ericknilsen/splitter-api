@@ -46,4 +46,12 @@ const update = (database, req, res) => {
     }
 }
 
-export {listUserExpenses, listGroupExpenses, create, update}
+const remove = (database, req, res) => {
+    const id = req.params.expenseId;
+    let query = {_id: new ObjectID(id)};
+    database.collection(COLLECTION_NAME).deleteOne(query, (err, result) => {
+        res.json({message:'Expense removed.'});
+    })
+}
+
+export {listUserExpenses, listGroupExpenses, create, update, remove}

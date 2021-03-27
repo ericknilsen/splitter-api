@@ -22,7 +22,7 @@ const CONNECTION_URL = `mongodb+srv://${username}:${password}@cluster0.2pegb.mon
 app.use(bodyParser.json(), (_, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     next();
 });
@@ -51,7 +51,7 @@ app.get("/listUserExpenses/:userEmail", authenticateJWT, (req, res) => expenses.
 app.get("/listGroupExpenses/:groupId", authenticateJWT, (req, res) => expenses.listGroupExpenses(database, req, res));
 app.post("/createExpense", authenticateJWT, (req, res) => expenses.create(database, req, res));
 app.put("/updateExpenses", authenticateJWT, (req, res) => expenses.update(database, req, res));
-
+app.delete("/deleteExpense/:expenseId", authenticateJWT, (req, res) => expenses.remove(database, req, res));
 
 //User Groups
 app.get("/listUserGroupOfUser/:userEmail", authenticateJWT, (req, res) => userGroups.listUserGroupOfUser(database, req, res));
