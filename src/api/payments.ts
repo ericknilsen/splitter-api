@@ -1,10 +1,10 @@
 import { ObjectID } from "mongodb";
 
-const COLLECTION_NAME = "expenses";
+const COLLECTION_NAME = "payments";
 
-const listUserExpenses = (database, req, res) => {
+const listUserPayments = (database, req, res) => {
     const user = req.params.userEmail;
-    database.collection(COLLECTION_NAME).find({$or: [{receiverUser:user}, {chargedUser: user}]}).toArray(
+    database.collection(COLLECTION_NAME).find({$or: [{paidUser:user}, {chargedUser: user}]}).toArray(
         (err, docs) => {   
             res.json(docs);
         }
@@ -25,7 +25,7 @@ const update = (database, req, res) => {
         let newValues = {$set: req.body[i]};
         database.collection(COLLECTION_NAME).updateOne(query, newValues, (err, result) => {
             if (err) {
-                errorMessage = `Error updating expenses: ${err}`;
+                errorMessage = `Error updating payments: ${err}`;
             }
         });
     }
@@ -33,16 +33,10 @@ const update = (database, req, res) => {
     if (errorMessage) {
         res.json({error: errorMessage});
     } else {
-        res.json({message:'Expenses updated.'});
+        res.json({message:'Payments updated.'});
     }
 }
 
-const remove = (database, req, res) => {
-    const id = req.params.expenseId;
-    let query = {_id: new ObjectID(id)};
-    database.collection(COLLECTION_NAME).deleteOne(query, (err, result) => {
-        res.json({message:'Expense removed.'});
-    })
-}
 
-export {listUserExpenses, create, update, remove}
+
+export {listUserPayments, create, update}

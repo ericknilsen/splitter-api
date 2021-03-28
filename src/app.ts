@@ -1,6 +1,7 @@
 import express from 'express';
 import MongoClient from 'mongodb';
 import * as expenses from './api/expenses';
+import * as payments from './api/payments';
 import * as userGroups from './api/user-groups';
 import * as auth from './auth/login';
 import * as socialUsers from './api/social-users';
@@ -48,10 +49,14 @@ app.post("/socialusers", (req, res) => socialUsers.create(database, req, res));
 
 //Expenses
 app.get("/listUserExpenses/:userEmail", authenticateJWT, (req, res) => expenses.listUserExpenses(database, req, res));
-app.get("/listGroupExpenses/:groupId", authenticateJWT, (req, res) => expenses.listGroupExpenses(database, req, res));
 app.post("/createExpense", authenticateJWT, (req, res) => expenses.create(database, req, res));
 app.put("/updateExpenses", authenticateJWT, (req, res) => expenses.update(database, req, res));
 app.delete("/deleteExpense/:expenseId", authenticateJWT, (req, res) => expenses.remove(database, req, res));
+
+//Payments
+app.get("/listUserPayments/:userEmail", authenticateJWT, (req, res) => payments.listUserPayments(database, req, res));
+app.post("/createPayment", authenticateJWT, (req, res) => payments.create(database, req, res));
+app.put("/updatePayments", authenticateJWT, (req, res) => payments.update(database, req, res));
 
 //User Groups
 app.get("/listUserGroupOfUser/:userEmail", authenticateJWT, (req, res) => userGroups.listUserGroupOfUser(database, req, res));
