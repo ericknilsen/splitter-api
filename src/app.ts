@@ -52,6 +52,8 @@ app.get("/listUserExpenses/:userEmail", authenticateJWT, (req, res) => expenses.
 app.post("/createExpense", authenticateJWT, (req, res) => expenses.create(database, req, res));
 app.put("/updateExpenses", authenticateJWT, (req, res) => expenses.update(database, req, res));
 app.delete("/deleteExpense/:expenseId", authenticateJWT, (req, res) => expenses.remove(database, req, res));
+app.post("/searchExpenses", authenticateJWT, (req, res) => expenses.search(database, req, res));
+
 
 //Payments
 app.get("/listUserPayments/:userEmail", authenticateJWT, (req, res) => payments.listUserPayments(database, req, res));
