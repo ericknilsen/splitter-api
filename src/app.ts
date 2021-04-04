@@ -53,6 +53,7 @@ app.post("/createExpense", authenticateJWT, (req, res) => expenses.create(databa
 app.put("/updateExpenses", authenticateJWT, (req, res) => expenses.update(database, req, res));
 app.delete("/deleteExpense/:expenseId", authenticateJWT, (req, res) => expenses.remove(database, req, res));
 app.post("/searchExpenses", authenticateJWT, (req, res) => expenses.search(database, req, res));
+app.post("/searchExpensesSize", authenticateJWT, (req, res) => expenses.countSearch(database, req, res));
 
 
 //Payments

@@ -13,12 +13,14 @@ const listUserExpenses = (database, req, res) => {
         );
 }
 
-const search = (database, req, res) => {
+const getQuery = (req) => {
     const { userEmail, month, status } = req.body;
+    const currentYear = new Date().getFullYear();
 
     const query: any = {
         $and: [
             { $expr: { $eq: [{ $month: '$date' }, parseInt(month)] } },
+            { $expr: { $eq: [{ $year: '$date' }, currentYear] } },
             {
                 $or: [{ receiverUser: userEmail },
                 { chargedUser: userEmail }]
@@ -30,9 +32,29 @@ const search = (database, req, res) => {
         query['$and'].push({ status });
     }
 
+    return query;
+}
+
+const search = (database, req, res) => {
+    const { page, limit } = req.body
+    const skip = (page - 1) * limit;
+
+    const query = getQuery(req);
     database.collection(COLLECTION_NAME).find(query)
-        .sort({ date: -1 })
+        .skip(skip)
+        .limit(limit)
+        .sort({ date: -1, description: 1, _id: 1 })
         .toArray(
+            (err, docs) => {
+                res.json(docs);
+            }
+        );
+}
+
+const countSearch = (database, req, res) => {
+    const query = getQuery(req);
+    database.collection(COLLECTION_NAME).find(query)
+        .count(
             (err, docs) => {
                 res.json(docs);
             }
@@ -75,4 +97,4 @@ const remove = (database, req, res) => {
     })
 }
 
-export { listUserExpenses, create, update, remove, search }
+export { listUserExpenses, create, update, remove, search, countSearch }
