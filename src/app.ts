@@ -60,6 +60,10 @@ app.post("/searchExpensesSize", authenticateJWT, (req, res) => expenses.countSea
 app.get("/listUserPayments/:userEmail", authenticateJWT, (req, res) => payments.listUserPayments(database, req, res));
 app.post("/createPayment", authenticateJWT, (req, res) => payments.create(database, req, res));
 app.put("/updatePayments", authenticateJWT, (req, res) => payments.update(database, req, res));
+app.delete("/deletePayment/:paymentId", authenticateJWT, (req, res) => payments.remove(database, req, res));
+app.post("/searchPayments", authenticateJWT, (req, res) => payments.search(database, req, res));
+app.post("/searchPaymentsSize", authenticateJWT, (req, res) => payments.countSearch(database, req, res));
+
 
 //User Groups
 app.get("/listUserGroupOfUser/:userEmail", authenticateJWT, (req, res) => userGroups.listUserGroupOfUser(database, req, res));
