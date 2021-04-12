@@ -20,7 +20,7 @@ const getQuery = (req) => {
             { $expr: { $eq: [{ $month: '$date' }, parseInt(month)] } },
             { $expr: { $eq: [{ $year: '$date' }, currentYear] } },
             {
-                $or: [{ receiverUser: userEmail },
+                $or: [{ paidUser: userEmail },
                 { chargedUser: userEmail }]
             }
         ]
