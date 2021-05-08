@@ -13,6 +13,25 @@ const listUserExpenses = (database, req, res) => {
         );
 }
 
+const getQuery2 = (req) => {
+    const { userEmail, startDate, endDate, status } = req.body;
+    
+    const query: any = {
+        $and: [
+            {"date":{ $gte: new Date(startDate), $lt: new Date(endDate) }},
+            {
+                $or: [{ receiverUser: userEmail }, { chargedUser: userEmail }]
+            }
+        ]
+    }
+
+    if(status) {
+        query['$and'].push({ status });
+    }
+
+    return query;
+}
+
 const getQuery = (req) => {
     const { userEmail, month, status } = req.body;
     const currentYear = new Date().getFullYear();
@@ -36,10 +55,22 @@ const getQuery = (req) => {
 }
 
 const search = (database, req, res) => {
-    const { page, limit } = req.body
-    const skip = (page - 1) * limit;
+    let { page, limit } = req.body;
 
-    const query = getQuery(req);
+    let skip = 0;
+    if (!page || !limit) {
+        limit = Number.MAX_SAFE_INTEGER;
+    } else {
+        skip = (page - 1) * limit;
+    }
+
+    let query: string;
+    if (req.body.month) {
+        query = getQuery(req);
+    } else {
+        query = getQuery2(req);
+    }
+    
     database.collection(COLLECTION_NAME).find(query)
         .skip(skip)
         .limit(limit)
@@ -50,6 +81,7 @@ const search = (database, req, res) => {
             }
         );
 }
+
 
 const countSearch = (database, req, res) => {
     const query = getQuery(req);
